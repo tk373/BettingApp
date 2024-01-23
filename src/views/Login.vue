@@ -5,7 +5,7 @@
         <ion-title>Login</ion-title>
       </ion-toolbar>
     </ion-header>
-    <ion-content :fullscreen="true">
+     <ion-content :fullscreen="true">
       <ion-header collapse="condense">
         <ion-toolbar>
           <ion-title size="large">Tab 1</ion-title>
@@ -23,6 +23,7 @@
         </ion-item>
 
         <ion-button expand="block" type="submit" class="ion-margin-top">Login</ion-button>
+        <ion-button expand="full" @click="goToRegister">Don't have an Account yet? Register</ion-button>
       </form>
     </ion-content>
   </ion-page>
@@ -51,9 +52,13 @@ import router from '@/router';
     return {
       email,
       password,
-      handleLogin
+      handleLogin,
+      goToRegister
     };
   }
+  const goToRegister = () => {
+      router.push('/register');
+    };
 </script>
 
 
