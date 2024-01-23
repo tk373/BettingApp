@@ -3,6 +3,11 @@
     <ion-header>
       <ion-toolbar>
         <ion-title>Home</ion-title>
+        <ion-buttons slot="end">
+          <ion-label>
+            Balance: ${{ accountBalance }}
+          </ion-label>
+        </ion-buttons>
       </ion-toolbar>
     </ion-header>
     <ion-content :fullscreen="true">
@@ -34,10 +39,13 @@
 </template>
 
 <script setup lang="ts">
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonItem, IonItemDivider, IonLabel, IonList } from '@ionic/vue';
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonItem, IonItemDivider, IonLabel, IonList, IonButtons } from '@ionic/vue';
 import ExploreContainer from '@/components/ExploreContainer.vue';
 import { computed, onMounted, ref } from 'vue';
 import { openDB } from 'idb';
+import { doc, getDoc } from 'firebase/firestore';
+import { auth, db } from '@/firebaseConfig';
+import { onAuthStateChanged } from 'firebase/auth';
 
 type Game = {
   id: string;
@@ -118,6 +126,28 @@ const formatGameTime = (dateTime: string): string => {
 };
 
 const sortedGames = computed<GamesByDate>(() => processGames(apiData.value));
+
+const accountBalance = ref(0);
+
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    fetchAccountBalance(user.uid);
+  }
+});
+
+const fetchAccountBalance = async (userId: string) => {
+  try {
+    const docRef = doc(db, 'users', userId);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      const userData = docSnap.data();
+      accountBalance.value = userData.amount || 0;
+    }
+  } catch (error) {
+    console.error('Error fetching account balance:', error);
+    // Handle error (e.g., show a message to the user)
+  }
+};
 
 onMounted(checkAndLoadData);
 </script>

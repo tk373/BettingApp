@@ -21,14 +21,35 @@
           v-model:is-open="showAlert"
           header="Complete Your Profile"
           :inputs="inputs"
-          :buttons="alertButtons">
+          :buttons="alertButtons"
+          :backdropDismiss="false">
         </ion-alert>
-        <div v-if="userInfo.username && userInfo.firstname && userInfo.lastname && userInfo.address">
-          <p>Username: {{ userInfo.username }}</p>
-          <p>Firstname: {{ userInfo.firstname }}</p>
-          <p>Lastname: {{ userInfo.lastname }}</p>
-          <p>Address: {{ userInfo.address }}</p>
-        </div>
+        <div v-if="userInfo.firstname && userInfo.lastname && userInfo.address && userInfo.username">
+    <!-- Use ion-card for better styling in Ionic -->
+    <ion-card>
+      <ion-card-content>
+        <!-- Use a list to display the information as it appears in the screenshot -->
+        <ion-list lines="none">
+          <ion-item>
+            <ion-label position="stacked">First Name</ion-label>
+            <ion-input readonly :value="userInfo.firstname"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label position="stacked">Last Name</ion-label>
+            <ion-input readonly :value="userInfo.lastname"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label position="stacked">Username</ion-label>
+            <ion-input readonly :value="userInfo.username"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label position="stacked">Amount</ion-label>
+            <ion-input readonly :value="userInfo.amount"></ion-input>
+          </ion-item>
+        </ion-list>
+      </ion-card-content>
+    </ion-card>
+  </div>
     </ion-content>
     </ion-content>
     
@@ -38,7 +59,7 @@
 <script setup lang="ts">
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { useAuth } from '../useauth';
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonAlert, IonButton, IonButtons } from '@ionic/vue';
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonAlert, IonButton, IonButtons, IonCardContent, IonCard, IonList, IonItem, IonLabel, IonInput } from '@ionic/vue';
 import ExploreContainer from '@/components/ExploreContainer.vue';
 import { ref, watchEffect } from 'vue';
 import { auth, db } from '@/firebaseConfig';
@@ -57,7 +78,7 @@ interface User {
 }
 
 const userInfo = ref<User>({
-  amount: 0, // Default amount set during registration
+  amount: 100, // Default amount set during registration
   username: null,
   firstname: null,
   lastname: null,
@@ -73,20 +94,13 @@ interface AlertInputData {
 }
 
 const inputs = [
-  { name: 'username', type: 'text', placeholder: 'Username' },
-  { name: 'firstname', type: 'text', placeholder: 'Firstname' },
-  { name: 'lastname', type: 'text', placeholder: 'Lastname' },
-  { name: 'address', type: 'text', placeholder: 'Address' }
+  { name: 'username', type: 'text', placeholder: 'username' },
+  { name: 'firstname', type: 'text', placeholder: 'firstname' },
+  { name: 'lastname', type: 'text', placeholder: 'lastname' },
+  { name: 'address', type: 'text', placeholder: 'address' }
 ];
 
 const alertButtons = [
-  {
-    text: 'Cancel',
-    role: 'cancel',
-    handler: () => {
-      showAlert.value = false;
-    }
-  },
   {
     text: 'Save',
     handler: async (data: AlertInputData) => {
@@ -150,3 +164,22 @@ watchEffect(async () => {
 });
 
 </script>
+
+<style>
+.grid-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 10px;
+  align-items: center;
+  justify-items: center;
+  height: 100%;
+}
+
+.grid-item {
+  text-align: center;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f4f4f4;
+}
+</style>
