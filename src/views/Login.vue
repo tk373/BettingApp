@@ -43,7 +43,7 @@ import router from '@/router';
       try {
         await signInWithEmailAndPassword(auth, email.value, password.value);
         console.log('Logged in successfully!');
-        router.push({ name: 'tab2' });
+        router.push({ name: 'home' });
       } catch (error) {
         console.error('Login failed:');
         // Handle errors

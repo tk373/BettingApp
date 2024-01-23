@@ -20,13 +20,14 @@ const routes: Array<RouteRecordRaw> = [
         redirect: '/login'
       },
       {
-        name: 'tab2',
-        path: 'tab2',
-        component: () => import('@/views/Tab2Page.vue')
+        name: 'home',
+        path: 'home',
+        component: () => import('@/views/Home.vue')
       },
       {
-        path: 'tab3',
-        component: () => import('@/views/Tab3Page.vue')
+        name: 'account',
+        path: 'account',
+        component: () => import('@/views/Account.vue')
       }
     ]
   }

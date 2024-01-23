@@ -2,19 +2,19 @@
   <ion-page>
     <ion-header>
       <ion-toolbar>
-        <ion-title>Tab 3</ion-title>
+        <ion-title>Account</ion-title>
       </ion-toolbar>
     </ion-header>
     <ion-content :fullscreen="true">
       <ion-header collapse="condense">
         <ion-toolbar>
-          <ion-title size="large">Tab 3</ion-title>
+          <ion-title size="large">Account</ion-title>
         </ion-toolbar>
       </ion-header>
       <ion-content :fullscreen="true">
         <p>GAYASS</p>
     </ion-content>
-      <ExploreContainer name="Tab 3 page" />
+      <ExploreContainer name="Account Page" />
     </ion-content>
   </ion-page>
 </template>
