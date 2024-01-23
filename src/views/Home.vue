@@ -22,7 +22,7 @@
           </ion-item-divider>
           <ion-item v-for="game in games" :key="game.id">
             <ion-label class="ion-text-start">{{ game.home_team }}</ion-label>
-            <ion-label class="ion-text-center">{{ new Date(game.commence_time).toLocaleTimeString() }}</ion-label>
+            <ion-label class="ion-text-center">{{ formatGameTime(game.commence_time) }}</ion-label>
             <ion-label class="ion-text-end">{{ game.away_team }}</ion-label>
           </ion-item>
         </template>
@@ -34,7 +34,7 @@
 </template>
 
 <script setup lang="ts">
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/vue';
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonItem, IonItemDivider, IonLabel, IonList } from '@ionic/vue';
 import ExploreContainer from '@/components/ExploreContainer.vue';
 import { computed, onMounted, ref } from 'vue';
 import { openDB } from 'idb';
@@ -110,6 +110,11 @@ const processGames = (games: Game[]): GamesByDate => {
   }
 
   return gamesByDate;
+};
+
+const formatGameTime = (dateTime: string): string => {
+  const date = new Date(dateTime);
+  return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', timeZoneName: 'short' });
 };
 
 const sortedGames = computed<GamesByDate>(() => processGames(apiData.value));
