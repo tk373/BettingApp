@@ -23,7 +23,7 @@
         </ion-item>
 
         <ion-button expand="block" type="submit" class="ion-margin-top">Login</ion-button>
-        <ion-button expand="full" @click="goToRegister">Don't have an Account yet? Register</ion-button>
+        
       </form>
     </ion-content>
   </ion-page>
@@ -31,7 +31,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { IonButton, IonContent, IonHeader, IonInput, IonItem, IonLabel, IonPage, IonTitle, IonToolbar } from '@ionic/vue';
+import { IonButton, IonContent, IonHeader, IonInput, IonItem, IonLabel, IonPage, IonTitle, IonToolbar, IonGrid, IonCol, IonRow } from '@ionic/vue';
 import { auth } from '../firebaseConfig'; // Adjust the path as necessary
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import router from '@/router';
@@ -44,7 +44,7 @@ import router from '@/router';
       try {
         await signInWithEmailAndPassword(auth, email.value, password.value);
         console.log('Logged in successfully!');
-        router.push({ name: 'home' });
+        router.push({ name: 'account' });
       } catch (error) {
         console.error('Login failed:');
         // Handle errors
@@ -57,7 +57,7 @@ import router from '@/router';
     };
   }
   const goToRegister = () => {
-      router.push('/register');
+    router.push('/register');
     };
 </script>
 
