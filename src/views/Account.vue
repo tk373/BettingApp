@@ -17,13 +17,10 @@
         </ion-toolbar>
       </ion-header>
       <ion-content :fullscreen="true">
-        <ion-alert
-          v-model:is-open="showAlert"
-          header="Complete Your Profile"
-          :inputs="inputs"
-          :buttons="alertButtons"
-          :backdropDismiss="false">
-        </ion-alert>
+        <div v-if="isLoading" class="center-spinner">
+           <ion-spinner name="crescent"></ion-spinner>
+         </div>
+       <account-pop-up></account-pop-up>
         <div v-if="userInfo.firstname && userInfo.lastname && userInfo.address && userInfo.username">
     <!-- Use ion-card for better styling in Ionic -->
     <ion-card>
@@ -59,93 +56,16 @@
 <script setup lang="ts">
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { useAuth } from '../useauth';
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonAlert, IonButton, IonButtons, IonCardContent, IonCard, IonList, IonItem, IonLabel, IonInput } from '@ionic/vue';
+import { IonSpinner, IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonAlert, IonButton, IonButtons, IonCardContent, IonCard, IonList, IonItem, IonLabel, IonInput } from '@ionic/vue';
 import ExploreContainer from '@/components/ExploreContainer.vue';
-import { ref, watchEffect } from 'vue';
+import { ref, watch, watchEffect } from 'vue';
 import { auth, db } from '@/firebaseConfig';
 import { signOut } from 'firebase/auth';
 import router from '@/router';
+import { userInfo  } from '@/types';
+import AccountPopUp from './AccountPopUp.vue';
+import { fetchUserInfo, showAlert, user, isLoading } from '@/dataCollection';
 
-const showAlert = ref(false);
-const { user } = useAuth();
-
-interface User {
-  amount: number
-  username: string | null;
-  firstname: string | null;
-  lastname: string | null;
-  address: string | null;
-}
-
-const userInfo = ref<User>({
-  amount: 100, // Default amount set during registration
-  username: null,
-  firstname: null,
-  lastname: null,
-  address: null
-});
-
-
-interface AlertInputData {
-  username: string;
-  firstname: string;
-  lastname: string;
-  address: string;
-}
-
-const inputs = [
-  { name: 'username', type: 'text', placeholder: 'username' },
-  { name: 'firstname', type: 'text', placeholder: 'firstname' },
-  { name: 'lastname', type: 'text', placeholder: 'lastname' },
-  { name: 'address', type: 'text', placeholder: 'address' }
-];
-
-const alertButtons = [
-  {
-    text: 'Save',
-    handler: async (data: AlertInputData) => {
-      // Update userInfo with the new data
-      userInfo.value = {
-        amount: 100,
-        username: data.username || null,
-        firstname: data.firstname || null,
-        lastname: data.lastname || null,
-        address: data.address || null
-      };
-      if (user.value) {
-        await setDoc(doc(db, 'users', user.value.uid), userInfo.value);
-      }
-      showAlert.value = false;
-    }
-  }
-];
-
-const fetchUserInfo = async () => {
-  if (user.value) {
-    const docRef = doc(db, 'users', user.value.uid);
-    const docSnap = await getDoc(docRef);
-
-    if (docSnap.exists()) {
-      const data = docSnap.data() as User;
-      console.log(data);
-
-      // Check if any of the required fields are missing or empty
-      const isProfileIncomplete = !data.username || !data.firstname || !data.lastname || !data.address;
-
-      if (isProfileIncomplete) {
-        // Show the alert if any field is missing
-        showAlert.value = true;
-      } else {
-        // Update userInfo with the fetched data
-        userInfo.value = data;
-        console.log(userInfo.value);
-      }
-    } else {
-      // If the document does not exist, show the alert to enter information
-      showAlert.value = true;
-    }
-  }
-};
 
 const logout = async () => {
   try {
@@ -181,5 +101,11 @@ watchEffect(async () => {
   border: 1px solid #ccc;
   border-radius: 5px;
   background-color: #f4f4f4;
+}
+.center-spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
 }
 </style>
