@@ -25,6 +25,10 @@
         <ion-button expand="block" type="submit" class="ion-margin-top">Login</ion-button>
         
       </form>
+      <ion-item>
+          <ion-label>Don't have an Account yet? </ion-label>
+          <ion-button @click="goToRegister" fill="clear" color="primary">Register here</ion-button>
+         </ion-item>
     </ion-content>
   </ion-page>
 </template>
@@ -44,7 +48,7 @@ import router from '@/router';
       try {
         await signInWithEmailAndPassword(auth, email.value, password.value);
         console.log('Logged in successfully!');
-        router.push({ name: 'account' });
+        router.push({ name: 'home' });
       } catch (error) {
         console.error('Login failed:');
         // Handle errors

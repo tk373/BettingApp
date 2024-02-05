@@ -54,11 +54,8 @@
 </template>
 
 <script setup lang="ts">
-import { doc, getDoc, setDoc } from 'firebase/firestore';
-import { useAuth } from '../useauth';
 import { IonSpinner, IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonAlert, IonButton, IonButtons, IonCardContent, IonCard, IonList, IonItem, IonLabel, IonInput } from '@ionic/vue';
-import ExploreContainer from '@/components/ExploreContainer.vue';
-import { ref, watch, watchEffect } from 'vue';
+import { watchEffect } from 'vue';
 import { auth, db } from '@/firebaseConfig';
 import { signOut } from 'firebase/auth';
 import router from '@/router';
