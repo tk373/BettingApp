@@ -21,16 +21,13 @@
           <ion-title size="large">Home</ion-title>
         </ion-toolbar>
       </ion-header>
-      
       <GameList />
-
     </ion-content>
   </ion-page>
 </template>
 
 <script setup lang="ts">
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonLabel, IonButtons } from '@ionic/vue';
-import ExploreContainer from '@/components/ExploreContainer.vue';
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonLabel, IonButtons } from '@ionic/vue';1
 import { auth } from '@/firebaseConfig';
 import GameList from './Gamelist.vue';
 import { onAuthStateChanged } from 'firebase/auth';
@@ -41,6 +38,7 @@ onAuthStateChanged(auth, (user) => {
     fetchAccountBalance(user.uid);
   }
 });
+
 
 </script>
 

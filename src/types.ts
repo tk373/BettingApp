@@ -45,11 +45,20 @@ export type Market = {
   }
 
   export const userInfo = ref<User>({
-    amount: 100, // Default amount set during registration
+    amount: 100, 
     username: null,
     firstname: null,
     lastname: null,
     address: null
   });
+
+  export type SelectedTeams = {
+    [key: string]: 'home' | 'away';
+  };
+
+  type Bet = {
+    team: string;
+    odds: number; // Adjust the type based on your data structure
+  };
 
   
