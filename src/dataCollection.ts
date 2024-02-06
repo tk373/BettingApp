@@ -1,8 +1,8 @@
-import { computed, ref } from 'vue';
+import { Ref, computed, ref } from 'vue';
 import { openDB } from 'idb';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '@/firebaseConfig';
-import { Game, GamesByDate, User, userInfo } from './types'; // Define your types here
+import { Game, GamesByDate, SelectedTeams, User, userInfo } from './types'; // Define your types here
 import { useAuth } from './useauth';
 
 const CACHE_DURATION = 86400000; // 24 hours
@@ -13,6 +13,8 @@ const accountBalance = ref(0);
 const { user } = useAuth();
 const isLoading = ref(true);
 const showAlert = ref(false);
+const showBettingSlip = ref(false);
+const selectedTeams: Ref<SelectedTeams> = ref({} as SelectedTeams);
 
 const dbName = 'nhlOddsDB';
 const storeName = 'nhlOddsStore';
@@ -73,9 +75,30 @@ const checkAndLoadData = async () => {
     return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit'});
   };
   
+  const calculateTotalOdds = (games: Game[], teams: SelectedTeams): number => {
+    let totalOdds = 1;
+    games.forEach((game) => {
+    const teamSelection = teams[game.id]; // 'home' or 'away'
+    if (teamSelection) {
+      // Find the 'h2h' market for this game
+      const h2hMarket = game.bookmakers.flatMap(bookmaker => bookmaker.markets).find(market => market.key === 'h2h');
 
-  
+      if (h2hMarket) {
+        // Determine the team's name based on the selection
+        const teamName = teamSelection === 'home' ? game.home_team : game.away_team;
 
+        // Find the outcome for the selected team
+        const outcome = h2hMarket.outcomes.find(outcome => outcome.name === teamName);
+
+        if (outcome) {
+          totalOdds *= outcome.price; // Multiply the odds together
+        }
+      }
+    }
+  });
+
+  return totalOdds;
+  }
   
   const findOdds = (bookmakers: any, teamName: any) => {
     for (const bookmaker of bookmakers) {
@@ -108,6 +131,18 @@ const checkAndLoadData = async () => {
     }
   };
 
+  const filterSortedGames = (sortedGames: Ref<Game[]>, selectedTeamsJSON: string): Ref<Game[]> => {
+    const selectedTeams: SelectedTeams = JSON.parse(selectedTeamsJSON); // Parse the selected teams from localStorage
+    const filteredGames = ref<Game[]>([]);
+  
+    filteredGames.value = sortedGames.value.filter(game => {
+      // Check if the game's ID is in the selectedTeams object
+      return Object.keys(selectedTeams).includes(game.id);
+    });
+  
+    return filteredGames;
+  };
+
   const fetchUserInfo = async () => {
     isLoading.value = true;
     if (user.value) {
@@ -136,4 +171,4 @@ const checkAndLoadData = async () => {
     }
   };
 
-  export { fetchUserInfo, fetchData, checkAndLoadData, processGames, findOdds, fetchAccountBalance, formatGameTime, apiData, sortedGames, accountBalance, isLoading, showAlert, user};
+  export { fetchUserInfo, fetchData, checkAndLoadData, processGames, findOdds, fetchAccountBalance, formatGameTime, filterSortedGames, calculateTotalOdds, apiData, sortedGames, accountBalance, isLoading, showAlert, user, selectedTeams, showBettingSlip};
