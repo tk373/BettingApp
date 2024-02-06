@@ -67,7 +67,7 @@ import { fetchUserInfo, showAlert, user, isLoading } from '@/dataCollection';
 const logout = async () => {
   try {
     await signOut(auth);
-    router.push('/login'); // Redirect to login page after logout
+    router.push('/login'); 
   } catch (error) {
     console.error('Logout failed:', error);
     // Handle logout error (e.g., show a message to the user)
