@@ -1,6 +1,6 @@
 import { Ref, computed, ref } from 'vue';
 import { openDB } from 'idb';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { db } from '@/firebaseConfig';
 import { Game, GamesByDate, SelectedTeams, User, userInfo } from './types'; // Define your types here
 import { useAuth } from './useauth';
@@ -43,6 +43,7 @@ const fetchData = async () => {
     console.log(err);
   }
 };
+
 
 const checkAndLoadData = async () => {
     const db = await dbPromise;
@@ -131,6 +132,42 @@ const checkAndLoadData = async () => {
     }
   };
 
+  const placeBetAndUpdateBalance = async (userId: string, betAmount: number) => {
+    try {
+      // Fetch the current account balance
+      const userDocRef = doc(db, 'users', userId);
+      const userDocSnap = await getDoc(userDocRef);
+      
+      if (userDocSnap.exists()) {
+        const userData = userDocSnap.data();
+        const currentBalance = userData.amount;
+        
+        // Calculate the new balance by subtracting the bet amount
+        const newBalance = currentBalance - betAmount;
+        
+        // Check if the new balance is not negative
+        if(newBalance >= 0) {
+          // Update the user's document with the new balance
+          await updateDoc(userDocRef, {
+            amount: newBalance
+          });
+          // Optionally, add logic to record the bet in another collection/document here
+          console.log('Account balance updated successfully');  
+          fetchAccountBalance(userId);
+        } else {
+          // Handle case where user does not have enough balance
+          console.error('Not enough balance to place bet');
+        }
+      } else {
+        console.error('User document does not exist');
+      }
+    } catch (error) {
+      console.error('Error updating account balance:', error);
+    } finally {
+      isLoading.value = false;
+    }
+  };
+
   const filterSortedGames = (sortedGames: Ref<Game[]>, selectedTeamsJSON: string): Ref<Game[]> => {
     const selectedTeams: SelectedTeams = JSON.parse(selectedTeamsJSON); // Parse the selected teams from localStorage
     const filteredGames = ref<Game[]>([]);
@@ -171,4 +208,4 @@ const checkAndLoadData = async () => {
     }
   };
 
-  export { fetchUserInfo, fetchData, checkAndLoadData, processGames, findOdds, fetchAccountBalance, formatGameTime, filterSortedGames, calculateTotalOdds, apiData, sortedGames, accountBalance, isLoading, showAlert, user, selectedTeams, showBettingSlip};
+  export { fetchUserInfo, fetchData, checkAndLoadData, placeBetAndUpdateBalance, processGames, findOdds, fetchAccountBalance, formatGameTime, filterSortedGames, calculateTotalOdds, apiData, sortedGames, accountBalance, isLoading, showAlert, user, selectedTeams, showBettingSlip};
