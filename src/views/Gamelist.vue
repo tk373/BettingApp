@@ -129,6 +129,7 @@
 }
 .list-md{
   padding-top: 0px;
+  padding-bottom: 0px;
 }
 .team-icon {
   height: 60px; /* Adjust size for better visibility */
