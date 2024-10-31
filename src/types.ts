@@ -22,7 +22,7 @@ export type Market = {
     home_team: string;
     away_team: string;
     commence_time: string;
-    bookmakers: Bookmaker[]; // Add bookmakers field here
+    bookmakers: Bookmaker[]; 
   };
   
   export type GamesByDate = {

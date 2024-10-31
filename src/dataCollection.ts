@@ -2,7 +2,7 @@ import { Ref, computed, ref } from 'vue';
 import { openDB } from 'idb';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { db } from '@/firebaseConfig';
-import { Game, GamesByDate, SelectedTeams, User, userInfo } from './types'; // Define your types here
+import { Game, GamesByDate, SelectedTeams, User, userInfo } from './types';
 import { useAuth } from './useauth';
 
 const CACHE_DURATION = 86400000; // 24 hours
@@ -18,6 +18,7 @@ const selectedTeams: Ref<SelectedTeams> = ref({} as SelectedTeams);
 
 const dbName = 'nhlOddsDB';
 const storeName = 'nhlOddsStore';
+const apikeyNHL = import.meta.env.VITE_NHL_API_KEY;
 
 
 const dbPromise = openDB(dbName, 1, {
@@ -27,7 +28,7 @@ const dbPromise = openDB(dbName, 1, {
 });
 
 const fetchData = async () => {
-  const url = 'https://api.the-odds-api.com/v4/sports/icehockey_nhl/odds/?apiKey=cf45597e4178a79932a6525041300585&regions=us&markets=h2h,spreads&oddsFormat=decimal';
+  const url = `https://api.the-odds-api.com/v4/sports/icehockey_nhl/odds/?apiKey=${apikeyNHL}&regions=us&markets=h2h,spreads&oddsFormat=decimal`;
   try {
     const response = await fetch(url);
     if (!response.ok) {

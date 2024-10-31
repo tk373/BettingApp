@@ -8,7 +8,7 @@ export function useAuth() {
     user.value = firebaseUser;
   });
 
-  onUnmounted(unsubscribe); // Clean up the subscription when the component is unmounted
+  onUnmounted(unsubscribe);
 
   return { user };
 }
