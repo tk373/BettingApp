@@ -8,17 +8,17 @@
       <ion-content :fullscreen="true">
         <form @submit.prevent="register">
           <ion-item>
-            <ion-label position="floating">Email</ion-label>
+            <label position="floating">Email: </label>
             <ion-input v-model="email" type="email"></ion-input>
           </ion-item>
           <ion-item>
-            <ion-label position="floating">Password</ion-label>
+            <label position="floating">Password: </label>
             <ion-input v-model="password" type="password"></ion-input>
           </ion-item>
           <ion-button expand="full" type="submit">Register</ion-button>
         </form>
         <ion-item>
-          <ion-label>Already have an Account? </ion-label>
+          <label>Already have an Account? </label>
           <ion-button @click="goToLogin" fill="clear" color="primary">Login here</ion-button>
          </ion-item>
         <div v-if="error">{{ error }}</div>

@@ -13,12 +13,12 @@
       </ion-header>
       <form @submit.prevent="handleLogin">
         <ion-item>
-          <ion-label position="floating">Email</ion-label>
+          <label position="floating">Email: </label>
           <ion-input v-model="email" required type="email"></ion-input>
         </ion-item>
 
         <ion-item>
-          <ion-label position="floating">Password</ion-label>
+          <label position="floating">Password: </label>
           <ion-input v-model="password" required type="password"></ion-input>
         </ion-item>
 
@@ -26,7 +26,7 @@
         
       </form>
       <ion-item>
-          <ion-label>Don't have an Account yet? </ion-label>
+          <label>Don't have an Account yet? </label>
           <ion-button @click="goToRegister" fill="clear" color="primary">Register here</ion-button>
          </ion-item>
     </ion-content>
