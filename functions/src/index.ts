@@ -86,7 +86,8 @@ async function evaluateBet(betData: BetData, betId: string) {
 
 async function fetchGameResults(): Promise<GameResult[]> {
   try {
-    const response = await axios.get(`https://api.the-odds-api.com/v4/sports/icehockey_nhl/scores/?apiKey=cf45597e4178a79932a6525041300585&&daysFrom=1`);
+    const apiKey = functions.config().oddsapi.key;
+    const response = await axios.get(`https://api.the-odds-api.com/v4/sports/icehockey_nhl/scores/?apiKey=${apiKey}&&daysFrom=1`);
     const data = response.data;
     
     return data.map((game: any): GameResult => {
