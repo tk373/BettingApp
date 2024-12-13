@@ -56,9 +56,4 @@ export type Market = {
     [key: string]: 'home' | 'away';
   };
 
-  export type Bet = {
-    team: string;
-    odds: number; 
-  };
-
   

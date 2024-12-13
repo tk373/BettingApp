@@ -8,18 +8,16 @@
      <ion-content :fullscreen="true">
       <ion-header collapse="condense">
         <ion-toolbar>
-          <ion-title size="large">Tab 1</ion-title>
+          <ion-title size="large">Login</ion-title>
         </ion-toolbar>
       </ion-header>
       <form @submit.prevent="handleLogin">
         <ion-item>
-          <label position="floating">Email: </label>
-          <ion-input v-model="email" required type="email"></ion-input>
+          <ion-input label="Email" label-placement="floating" v-model="email" required type="email"></ion-input>
         </ion-item>
 
         <ion-item>
-          <label position="floating">Password: </label>
-          <ion-input v-model="password" required type="password"></ion-input>
+          <ion-input label="Password" label-placement="floating" v-model="password" required type="password"></ion-input>
         </ion-item>
 
         <ion-button expand="block" type="submit" class="ion-margin-top">Login</ion-button>

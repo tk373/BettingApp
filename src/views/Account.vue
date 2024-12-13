@@ -28,20 +28,16 @@
         <!-- Use a list to display the information as it appears in the screenshot -->
         <ion-list lines="none">
           <ion-item>
-            <ion-label position="stacked">First Name</ion-label>
-            <ion-input readonly :value="userInfo.firstname"></ion-input>
+            <ion-input label="First Name" label-placement="stacked" readonly :value="userInfo.firstname"></ion-input>
           </ion-item>
           <ion-item>
-            <ion-label position="stacked">Last Name</ion-label>
-            <ion-input readonly :value="userInfo.lastname"></ion-input>
+            <ion-input label="Last Name" label-placement="stacked" readonly :value="userInfo.lastname"></ion-input>
           </ion-item>
           <ion-item>
-            <ion-label position="stacked">Username</ion-label>
-            <ion-input readonly :value="userInfo.username"></ion-input>
+            <ion-input label="Username" label-placement="stacked" readonly :value="userInfo.username"></ion-input>
           </ion-item>
           <ion-item>
-            <ion-label position="stacked">Amount</ion-label>
-            <ion-input readonly :value="userInfo.amount"></ion-input>
+            <ion-input label="Amount" label-placement="stacked" readonly :value="'$' + userInfo.amount"></ion-input>
           </ion-item>
         </ion-list>
       </ion-card-content>
